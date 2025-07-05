@@ -88,6 +88,7 @@ async def upload_file(file: UploadFile = File(...)):
 
 @app.post("/generate-pdf")
 async def generate_pdf_report(results: dict):
+    print("Received request to generate PDF.")
     buffer = io.BytesIO()
     doc = SimpleDocTemplate(buffer, pagesize=letter)
     styles = getSampleStyleSheet()
@@ -97,22 +98,26 @@ async def generate_pdf_report(results: dict):
     story.append(Spacer(1, 0.2 * inch))
 
     if 'chartImage' in results and results['chartImage']:
+        print("chartImage data found in results.")
         try:
             # Decode the base64 image data
             image_data = base64.b64decode(results['chartImage'].split(',')[1])
-            image = ImageReader(io.BytesIO(image_data))
+            print(f"Image data decoded. Length: {len(image_data)} bytes")
             
             # Add image to story, scale it to fit page width
-            img_width, img_height = image.getSize()
+            img_width, img_height = ImageReader(io.BytesIO(image_data)).getSize()
             aspect_ratio = img_height / float(img_width)
             
             # Max width for the image in PDF (adjust as needed)
             max_width = letter[0] - 2 * inch  # Page width minus margins
             
-            story.append(Image(image, width=max_width, height=max_width * aspect_ratio))
+            story.append(Image(io.BytesIO(image_data), width=max_width, height=max_width * aspect_ratio))
             story.append(Spacer(1, 0.2 * inch))
+            print("Chart image added to PDF story.")
         except Exception as e:
             print(f"Error embedding chart image: {e}")
+    else:
+        print("No chartImage data found in results.")
 
     story.append(Paragraph("Sentiment Distribution:", styles['h2']))
     for sentiment, count in results['sentiment_counts'].items():
