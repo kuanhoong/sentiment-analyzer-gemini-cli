@@ -44,7 +44,7 @@ function App() {
                             <strong>AI Model:</strong> Gemini 1.5 Flash (High accuracy sentiment analysis)
                         </div>
                         <div>
-                            <button className="btn btn-primary me-2">Download PDF Report</button>
+                            <button className="btn btn-primary me-2" disabled>Download PDF Report</button>
                             <FileUpload onFileUpload={handleFileUpload} />
                         </div>
                     </div>
