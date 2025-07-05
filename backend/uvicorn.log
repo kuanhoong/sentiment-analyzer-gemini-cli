@@ -1,0 +1,17 @@
+INFO:     Started server process [44678]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+Received file: sample_comments.csv
+File content length: 249 bytes
+Successfully read CSV into DataFrame.
+Comment column found.
+Sentiment analysis complete.
+Sentiment counts: {'Mixed': 3, 'Positive': 2, 'Negative': 2, 'Neutral': 1}
+Top comments: {'Mixed': ["It's okay, not bad.", 'I have mixed feelings about this.', 'Some parts are good, others are not.'], 'Positive': ['This is a great product!', 'The quality is excellent.'], 'Negative': ["I'm not happy with the service.", 'The customer support was terrible.'], 'Neutral': ['It does the job.']}
+INFO:     127.0.0.1:63256 - "POST /upload HTTP/1.1" 200 OK
+Received request to generate PDF.
+chartImage data found in results.
+Image data decoded. Length: 60326 bytes
+Chart image added to PDF story.
+INFO:     127.0.0.1:63256 - "POST /generate-pdf HTTP/1.1" 200 OK
