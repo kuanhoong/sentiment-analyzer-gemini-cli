@@ -24,8 +24,25 @@ function App() {
             });
             setResults(response.data);
             setError(null);
+            console.log("File upload successful:", response.data);
         } catch (error) {
-            setError('Error uploading file. Please try again.');
+            console.error("File upload error:", error);
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.error("Error response data:", error.response.data);
+                console.error("Error response status:", error.response.status);
+                console.error("Error response headers:", error.response.headers);
+                setError(`Error: ${error.response.data.error || 'Server error'}`);
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.error("Error request:", error.request);
+                setError('Error: No response from server. Is the backend running?');
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.error("Error message:", error.message);
+                setError(`Error: ${error.message}`);
+            }
             setResults(null);
         }
     };
