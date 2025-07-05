@@ -1,7 +1,8 @@
-
-import React from 'react';
+import React, { useRef } from 'react';
 
 const FileUpload = ({ onFileUpload }) => {
+    const fileInputRef = useRef(null);
+
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -9,10 +10,21 @@ const FileUpload = ({ onFileUpload }) => {
         }
     };
 
+    const handleClick = () => {
+        fileInputRef.current.click();
+    };
+
     return (
-        <div>
-            <input type="file" onChange={handleFileChange} accept=".csv,.xlsx" />
-        </div>
+        <>
+            <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+                accept=".csv,.xlsx"
+            />
+            <button className="btn btn-secondary" onClick={handleClick}>Upload New File</button>
+        </>
     );
 };
 

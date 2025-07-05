@@ -1,9 +1,5 @@
-
 import React from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+import { Pie } from 'react-chartjs-2';
 
 const ResultsDashboard = ({ results }) => {
     const { sentiment_counts, top_comments } = results;
@@ -12,34 +8,54 @@ const ResultsDashboard = ({ results }) => {
         labels: Object.keys(sentiment_counts),
         datasets: [
             {
-                label: 'Number of Comments',
                 data: Object.values(sentiment_counts),
                 backgroundColor: [
-                    'rgba(75, 192, 192, 0.6)',
-                    'rgba(255, 99, 132, 0.6)',
-                    'rgba(255, 206, 86, 0.6)',
-                    'rgba(54, 162, 235, 0.6)',
+                    '#28a745',
+                    '#dc3545',
+                    '#ffc107',
+                    '#6c757d',
                 ],
             },
         ],
     };
 
-    return (
-        <div>
-            <h2>Sentiment Distribution</h2>
-            <Bar data={chartData} />
+    const totalComments = Object.values(sentiment_counts).reduce((a, b) => a + b, 0);
 
-            <h2>Top Comments</h2>
-            {Object.entries(top_comments).map(([sentiment, comments]) => (
-                <div key={sentiment}>
-                    <h3>{sentiment}</h3>
-                    <ul>
-                        {comments.map((comment, index) => (
-                            <li key={index}>{comment}</li>
-                        ))}
-                    </ul>
+    return (
+        <div className="row">
+            <div className="col-md-5">
+                <div className="card">
+                    <div className="card-body">
+                        <h5 className="card-title">Sentiment Distribution</h5>
+                        <Pie data={chartData} />
+                        <div className="d-flex justify-content-around mt-3">
+                            {Object.keys(sentiment_counts).map(sentiment => (
+                                <div key={sentiment} className="text-center">
+                                    <strong>{sentiment}</strong>
+                                    <div>{sentiment_counts[sentiment]} ({((sentiment_counts[sentiment] / totalComments) * 100).toFixed(1)}%)</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
-            ))}
+            </div>
+            <div className="col-md-7">
+                <div className="card">
+                    <div className="card-body">
+                        <h5 className="card-title">Detailed Breakdown</h5>
+                        {Object.entries(top_comments).map(([sentiment, comments]) => (
+                            <div key={sentiment} className="mb-4">
+                                <h6>{sentiment} <span className="text-muted">{sentiment_counts[sentiment]} comments ({((sentiment_counts[sentiment] / totalComments) * 100).toFixed(1)}%)</span></h6>
+                                {comments.map((comment, index) => (
+                                    <div key={index} className="bg-light p-2 mb-2 rounded">
+                                        {comment}
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
