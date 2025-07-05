@@ -47,6 +47,24 @@ function App() {
         }
     };
 
+    const handleDownloadPdf = async () => {
+        try {
+            const response = await axios.post('http://localhost:8000/generate-pdf', results, {
+                responseType: 'blob', // Important for downloading files
+            });
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'sentiment_report.pdf');
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+        } catch (error) {
+            console.error("Error downloading PDF:", error);
+            setError('Error generating PDF report.');
+        }
+    };
+
     return (
         <div className="container mt-5">
             <div className="text-center mb-4">
@@ -61,7 +79,7 @@ function App() {
                             <strong>AI Model:</strong> Gemini 1.5 Flash (High accuracy sentiment analysis)
                         </div>
                         <div>
-                            <button className="btn btn-primary me-2" disabled>Download PDF Report</button>
+                            <button className="btn btn-primary me-2" onClick={handleDownloadPdf} disabled={!results}>Download PDF Report</button>
                             <FileUpload onFileUpload={handleFileUpload} />
                         </div>
                     </div>

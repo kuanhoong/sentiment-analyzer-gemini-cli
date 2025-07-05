@@ -19,6 +19,7 @@ httplib2==0.22.0
 idna==3.10
 numpy==2.3.1
 pandas==2.3.0
+pillow==11.3.0
 proto-plus==1.26.1
 protobuf==5.29.5
 pyasn1==0.6.1
@@ -30,6 +31,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.1.1
 python-multipart==0.0.20
 pytz==2025.2
+reportlab==4.4.2
 requests==2.32.4
 rsa==4.9.1
 six==1.17.0
