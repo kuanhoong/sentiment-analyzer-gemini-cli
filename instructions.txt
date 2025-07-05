@@ -1,0 +1,118 @@
+I want to build a full-stack web app that allows users to upload a Google Sheets file (in .csv or .xlsx format) containing survey comments. Then, using the Gemini API, I want to classify the sentiment of each comment into one of the following categories:
+	•	Positive
+	•	Negative
+	•	Neutral
+	•	Mixed
+
+✅ Functional Requirements:
+
+1. File Upload Interface
+	•	Upload .csv or .xlsx file (from exported Google Sheets)
+	•	Read column named Comment
+
+2. Sentiment Classification (Gemini only)
+	•	Use the Gemini API to classify the sentiment of each comment.
+	•	Prompt: “Classify the sentiment of the following comment as Positive, Negative, Neutral, or Mixed.”
+	•	Save the output alongside the comment in a structured format.
+
+3. Analysis and Insight
+	•	Count total number of comments per sentiment
+	•	Extract top 3 representative comments for each sentiment
+	•	Optional: Identify common keywords or themes using Gemini summarization
+
+4. Visualization Dashboard
+	•	Bar chart or pie chart of sentiment distribution
+	•	Section to display top comments per sentiment
+	•	Optional: Word cloud per sentiment category
+
+🛠️ Technical Stack:
+	•	Frontend: React (or Next.js)
+	•	Backend: Python (FastAPI or Flask)
+	•	Visualization: Chart.js or Plotly
+	•	AI: Gemini 2.5 Flash (no Hugging Face or local models)
+
+📁 Project Bootstrapping:
+	•	Scaffold the full-stack app
+	•	Use sample comments for testing
+	•	Start with CSV support first, then add .xlsx if needed
+	•	Load Gemini API key from environment variable
+
+Please generate the project structure and starting code for the backend and frontend. Also scaffold the Gemini API integration for classification and set up basic React frontend with file upload and result display.
+
+💾 Git Integration + Commit Rule (Cursor prompt addition):
+
+Please initialize a new Git repository for this project.
+	•	Add .gitignore for Python and Node projects (include __pycache__, env, node_modules, etc.)
+	•	Automatically commit the code with a meaningful message after every successful run or implementation step.
+	•	Track these actions using the following rule, and store it in a file called claude.md at the root of the project.
+
+GEMINI.md
+
+## Project Automation Rule
+
+This project follows a strict automation rule:
+
+1. A Git repository is initialized from the beginning.
+2. After each successful development step or test run, code is committed to Git with a meaningful commit message.
+3. This rule ensures that every working state is version-controlled and recoverable.
+4. No local changes should remain uncommitted before starting the next development iteration.
+
+Example Commit Messages:
+- feat: added file upload interface
+- chore: updated Gemini API call for sentiment classification
+- fix: resolved bug in visualization rendering
+
+This is the .gitignore file
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
+dist/
+build/
+.env
+.env.*
+
+# Virtual environments
+venv/
+env/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# React
+build/
+.cache/
+.next/
+out/
+
+This is the claude.md file, update accordingly
+
+## Project Automation Rule
+
+This project follows a strict automation rule:
+
+1. A Git repository is initialized from the beginning.
+2. After each successful development step or test run, code is committed to Git with a meaningful commit message.
+3. This rule ensures that every working state is version-controlled and recoverable.
+4. No local changes should remain uncommitted before starting the next development iteration.
+
+### Example Commit Messages:
+- feat: added file upload interface
+- chore: updated Gemini API call for sentiment classification
+- fix: resolved bug in visualization rendering
+- refactor: cleaned up component logic
+- docs: added sentiment analysis instructions
