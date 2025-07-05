@@ -56,6 +56,7 @@ function App() {
                 chartImage = await resultsDashboardRef.current.exportChart();
             }
 
+            console.log("Chart Image Data:", chartImage);
             const response = await axios.post('http://localhost:8000/generate-pdf', { ...results, chartImage }, {
                 responseType: 'blob', // Important for downloading files
             });
