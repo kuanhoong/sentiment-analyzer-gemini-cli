@@ -3,6 +3,11 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 import io
+import os
+from dotenv import load_dotenv
+import google.generativeai as genai
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -15,6 +20,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Configure the Gemini API
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+model = genai.GenerativeModel('gemini-1.5-flash')
+
+def classify_sentiment(comment):
+    try:
+        prompt = f"Classify the sentiment of the following comment as Positive, Negative, Neutral, or Mixed: \"{comment}\""
+        response = model.generate_content(prompt)
+        return response.text.strip()
+    except Exception as e:
+        return "Error"
+
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
     contents = await file.read()
@@ -23,8 +40,8 @@ async def upload_file(file: UploadFile = File(...)):
     if 'Comment' not in df.columns:
         return {"error": "'Comment' column not found in the uploaded file."}
 
-    # Placeholder for sentiment analysis
-    df['sentiment'] = 'Neutral' 
+    # Gemini sentiment analysis
+    df['sentiment'] = df['Comment'].apply(classify_sentiment)
     
     # Count total number of comments per sentiment
     sentiment_counts = df['sentiment'].value_counts().to_dict()
