@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import FileUpload from './components/FileUpload';
 import ResultsDashboard from './components/ResultsDashboard';
@@ -47,9 +47,16 @@ function App() {
         }
     };
 
+    const resultsDashboardRef = useRef(null);
+
     const handleDownloadPdf = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/generate-pdf', results, {
+            let chartImage = null;
+            if (resultsDashboardRef.current) {
+                chartImage = await resultsDashboardRef.current.exportChart();
+            }
+
+            const response = await axios.post('http://localhost:8000/generate-pdf', { ...results, chartImage }, {
                 responseType: 'blob', // Important for downloading files
             });
             const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -91,7 +98,7 @@ function App() {
             {results && (
                 <div>
                     <KeyInsights results={results} />
-                    <ResultsDashboard results={results} />
+                    <ResultsDashboard ref={resultsDashboardRef} results={results} />
                 </div>
             )}
         </div>

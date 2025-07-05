@@ -9,10 +9,12 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 import re
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
 import json
+import base64
+from reportlab.lib.utils import ImageReader
 
 load_dotenv()
 
@@ -93,6 +95,24 @@ async def generate_pdf_report(results: dict):
 
     story.append(Paragraph("Sentiment Analysis Report", styles['h1']))
     story.append(Spacer(1, 0.2 * inch))
+
+    if 'chartImage' in results and results['chartImage']:
+        try:
+            # Decode the base64 image data
+            image_data = base64.b64decode(results['chartImage'].split(',')[1])
+            image = ImageReader(io.BytesIO(image_data))
+            
+            # Add image to story, scale it to fit page width
+            img_width, img_height = image.getSize()
+            aspect_ratio = img_height / float(img_width)
+            
+            # Max width for the image in PDF (adjust as needed)
+            max_width = letter[0] - 2 * inch  # Page width minus margins
+            
+            story.append(Image(image, width=max_width, height=max_width * aspect_ratio))
+            story.append(Spacer(1, 0.2 * inch))
+        except Exception as e:
+            print(f"Error embedding chart image: {e}")
 
     story.append(Paragraph("Sentiment Distribution:", styles['h2']))
     for sentiment, count in results['sentiment_counts'].items():

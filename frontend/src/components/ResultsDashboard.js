@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useRef, useImperativeHandle, forwardRef } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import html2canvas from 'html2canvas';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const ResultsDashboard = ({ results }) => {
+const ResultsDashboard = forwardRef(({ results }, ref) => {
+    const chartRef = useRef();
+
+    useImperativeHandle(ref, () => ({
+        exportChart: async () => {
+            if (chartRef.current) {
+                const canvas = await html2canvas(chartRef.current);
+                return canvas.toDataURL('image/png');
+            }
+            return null;
+        }
+    }));
+
     const { sentiment_counts, top_comments } = results;
 
     const chartData = {
@@ -28,7 +41,7 @@ const ResultsDashboard = ({ results }) => {
         <div className="row">
             <div className="col-md-5">
                 <div className="card">
-                    <div className="card-body">
+                    <div className="card-body" ref={chartRef}>
                         <h5 className="card-title">Sentiment Distribution</h5>
                         <Pie data={chartData} />
                         <div className="d-flex justify-content-around mt-3">
@@ -61,6 +74,6 @@ const ResultsDashboard = ({ results }) => {
             </div>
         </div>
     );
-};
+});
 
 export default ResultsDashboard;
